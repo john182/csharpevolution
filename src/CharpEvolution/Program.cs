@@ -1,4 +1,5 @@
 ﻿using System;
+using CharpEvolution.Tests01;
 
 namespace CharpEvolution
 {
@@ -6,7 +7,9 @@ namespace CharpEvolution
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var calculadora = new Calculadora();
+            
+            calculadora.Iniciar();
         }
     }
 }
