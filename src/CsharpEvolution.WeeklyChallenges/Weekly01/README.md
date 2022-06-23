@@ -2,7 +2,9 @@
 ## Condicionais
 
 É uma estrutura que indica quais instruções o sistema deve processar de acordo com uma expressão booleana
-Exemplo
+Exemplo:
+
+#### IF/ELSE
 
 ```
 if (expressão booleana)
@@ -14,6 +16,15 @@ else
   // se falso entra aqui
 }
 ```
+
+Para facilitar o entendimento segue um fluxo grama:
+
+![img.png](img.png)
+
+Estrutura condicional composta:
+
+![img_1.png](img_1.png)
+
 Há uma outra forma também de escrever a mesma estrutura, conhecido como operador ternario;
 
 ```
@@ -29,6 +40,42 @@ Console.WrteLine(parOuImpa);
 Saida: é par
  
 ```
+
+## Switch/Case
+
+É uma estrutura de condição que define o código a ser executado com base em uma comparação de valores.
+
+
+```
+switch (variável)
+{
+case valor1:
+      // código 1      
+break;
+case valor2:
+      // código 2
+}
+```
+
+Note o uso do **break** é utilizado para especificar a última linha de código a ser executada, caso
+não exista ele iria exeucat o outro trecho de comparação.
+Exemplo:
+
+```
+switch (variável)
+{
+case valor1:
+case valor2:
+      // código para caso que ocorra no valor1 e valor2
+break;
+case valor3:
+     // codigo
+break;     
+
+}
+```
+
+![img_2.png](img_2.png)
 
 ## Loops
 Executam repetidamente uma instrução ou um bloco de instruções, são eles:
@@ -427,5 +474,79 @@ Usamos modificadores de acesso para evitar que algum dados ou metodos sofram ace
 
 
 
+## System.Text
+
+#### StringBuilder
+O StringBuilder é usado quando vc deseja manipular diversas vezes uma cadeia de caractres sem ser preciso criar um novo objeto já que o System.String é imutavel 
+e todas vez que uma cadeias de caractres é alterado é criado um novo objeto na mémoria.
+
+Segue alguns metodos:
+* Append: pode ser usado para adicionar texto
+* Insert: pode ser usado para adicionar texto em uma posição especifica
+* Remove: pode ser usado para remover uma parte especifica do texto
+* Replace: pode ser usado para substitui texto
+
+Exemplos:
+
+```
+StringBuilder myStringBuilder = new StringBuilder("Bem vido ao mundo de desenvolvimento");
+myStringBuilder.Append(" em C#.");
+Console.WriteLine(myStringBuilder);
+
+saida: Bem vido ao mundo de  desenvolvimento em C#.
+
+StringBuilder myStringBuilder = new StringBuilder("Bem vindo ao mundo de desenvolvimento em C#.");
+myStringBuilder.Insert(9," brow");
+Console.WriteLine(myStringBuilder);
+
+saida: Bem vindo brow ao mundo de desenvolvimento em C#.
+
+StringBuilder myStringBuilder = new StringBuilder("Bem vindo brow ao mundo de desenvolvimento em C#.");
+myStringBuilder.Remove(10,5);
+Console.WriteLine(myStringBuilder);
+
+saida: Bem vindo ao mundo de desenvolvimento em C#.
+
+StringBuilder myStringBuilder = new StringBuilder("Bem vindo brow ao mundo de desenvolvimento em C#.");
+myStringBuilder.Replace(".","!!!");
+Console.WriteLine(myStringBuilder);
+
+saida: Bem vindo brow ao mundo de desenvolvimento em C#!!!
+
+```
+#### Encoding
+
+Converte um conjunto de caracteres em uma sequência de bytes
+
+```
+
+string texto = "Convertendo string para array de byte";  
+  
+byte[] bytes = Encoding.ASCII.GetBytes(texto);
+
+string textoConvertido = Encoding.UTF8.GetString(bytes);
+        
+Console.WriteLine(textoConvertido);
+
+saida: Convertendo string para array de byte
+
+```
+
+#### Normalize
+
+Retorna uma nova cadeia de caracteres cuja representação binária está em um formulário de normalização Unicode específico.
+
+
+```
+var teste = "café".Normalize(NormalizationForm.FormKD) .Where(ch => char.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)  
+            .ToArray();
+        
+Console.WriteLine(teste);
+
+saida: cafe
+
+```
+
+## System.Threading
 
 
