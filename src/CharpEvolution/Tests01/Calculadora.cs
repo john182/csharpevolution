@@ -1,28 +1,29 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CharpEvolution.Ext;
+using CharpEvolution.Tests01.Calculados;
+using CsharpEvolution.Tests01.Calculos;
 
-namespace CharpEvolution.Tests01
+namespace CsharpEvolution.Tests01
 {
-    public class Calculadora:ICalculadora
+    public class Calculadora
     {
-        
         public void Iniciar()
         {
-
             CriarMenu();
             var operador = "";
-            
-            while (operador!= "q")
+
+            while (operador != "q")
             {
                 operador = Console.ReadLine();
-              
-                if (operador!= "+")
+
+                if (operador is not ("+" or "*" or "-" or "/") )
                 {
                     Console.WriteLine("Operador invalido!! informe um operador validor ou precione 'q' para sair\n");
                     continue;
                 }
-                
+
                 Console.WriteLine("Informe um ou mais operando\n");
                 Console.WriteLine("Exmplo 10 20.5 30\n");
                 var entrada = Console.ReadLine();
@@ -30,7 +31,7 @@ namespace CharpEvolution.Tests01
                 decimal[] operandos;
                 try
                 {
-                     operandos = entrada.Split(" ")
+                    operandos = entrada.Split(" ")
                         .Select(value => decimal.Parse(String.Join("", Regex.Split(value, @"[\D]")))).ToArray();
                 }
                 catch (FormatException ex)
@@ -39,137 +40,34 @@ namespace CharpEvolution.Tests01
                     break;
                 }
 
-                RealizarOperacoes(operador,operandos);
-                
-                
+                RealizarOperacoes(operador, operandos);
+
                 Console.WriteLine("\nInforme a operação ou precione 'q' para sair\n");
-                
             }
-          
         }
 
-        
-        public void Somar( params decimal[] operandos)
-        {
-
-            if (operandos.Length < 2)
-            {
-                Console.WriteLine("É preciso informar ao menos dois operandos");
-                return;
-            }
-
-            var total = operandos.Sum();
-
-            Console.WriteLine("O Resultado é {0}",total);
-        }
-
-      
-        public void Subtrair( params decimal[] operandos)
-        {
-
-            if (operandos.Length < 2)
-            {
-                Console.WriteLine("É preciso informar ao menos dois operandos");
-                return;
-            }
-
-            var total = operandos[0];
-            for (var i = 1;i< operandos.Length;i++)
-            {
-                total -= operandos[i];
-            }
-            
-            
-            Console.WriteLine("O Resultado é {0}",total);
-        }
-      
-
-        public void Multiplicar( params decimal[] operandos)
-        {
-
-            if (operandos.Length < 2)
-            {
-                Console.WriteLine("É preciso informar ao menos dois operandos");
-                return;
-            }
-
-         
-            var total = operandos[0];
-            for (var i = 1;i< operandos.Length;i++)
-            {
-                total *= operandos[i];
-            }
-
-            
-            Console.WriteLine("O Resultado é {0}",total);
-        }
-        
-        public void Dividir( params decimal[] operandos)
-        {
-        
-            if (operandos.Length < 2)
-            {
-                Console.WriteLine("É preciso informar ao menos dois operandos");
-                return;
-            }
-        
-         
-            var total = operandos[0];
-        
-            if (total == 0)
-            {
-                Console.WriteLine("O Resultado é Indeterminado");
-                return;
-            }
-        
-            var concluiu = true;
-            for (var i = 1;i< operandos.Length;i++)
-            {
-                if (operandos[i] == 0)
-                {
-                    Console.WriteLine("O Resultado é indefinido");
-                    concluiu = false;
-                    break;
-                }
-                
-                total /= operandos[i];
-            }
-        
-            if (concluiu)
-                Console.WriteLine("O Resultado é {0}",total);
-        }
 
         private void RealizarOperacoes(string operador, decimal[] operandos)
         {
-            switch (operador)
-            {
-                case "+":
-                    Somar(operandos);
-                    break;
-                case "-":
-                    Subtrair(operandos);
-                    break;
-                    
-                case "*":
-                    Multiplicar(operandos);
-                    break;
-                    
-                case "/":
-                    Dividir(operandos);
-                    break;
-                   
-            }
+            var result = operador.GetEnumValueFromDescription<Operadores>();
+            
+            var dividir = new Dividir();
+            var multiplicar = new Multiplicar(dividir);
+            var subtrair = new Subtrair(multiplicar);
+            var soma = new Somar(subtrair);
+
+            soma.Calcular(result, operandos);
         }
 
-         private void CriarMenu()
-         {
-             Console.WriteLine("Calculadora\n");
-             Console.WriteLine("Operacoes\n");
-             Console.WriteLine("'+' : soma\n");
-             Console.WriteLine("'-' : subtracao\n");
-             Console.WriteLine("'*' : multiplicao\n");
-             Console.WriteLine("'/' : divisao\n");
-             Console.WriteLine("\nInforme a operação ou precione 'q' para sair\n");
-         }
+        private void CriarMenu()
+        {
+            Console.WriteLine("Calculadora\n");
+            Console.WriteLine("Operacoes\n");
+            Console.WriteLine("'+' : soma\n");
+            Console.WriteLine("'-' : subtracao\n");
+            Console.WriteLine("'*' : multiplicao\n");
+            Console.WriteLine("'/' : divisao\n");
+            Console.WriteLine("\nInforme a operação ou precione 'q' para sair\n");
+        }
     }
 }

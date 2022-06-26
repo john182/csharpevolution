@@ -1,5 +1,6 @@
-﻿using System;
-using CharpEvolution.Tests01;
+﻿using CharpEvolution.Tests01;
+using CsharpEvolution.Tests01;
+using CsharpEvolution.Tests01.Calculos;
 
 namespace CharpEvolution
 {
@@ -7,9 +8,11 @@ namespace CharpEvolution
     {
         static void Main(string[] args)
         {
-            var calculadora = new Calculadora();
+            // var calculadora = new Calculadora();
+            //
+            // calculadora.Iniciar();
             
-            calculadora.Iniciar();
+            new RaizCubica().Calcular(9);
         }
     }
 }
