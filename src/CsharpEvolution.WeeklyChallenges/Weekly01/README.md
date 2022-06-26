@@ -189,14 +189,14 @@ Vale Resaltar que as operações seguem a procedencia como nas operações matem
 ##### Operadores de comparação:
 
 
-| Símbolo | Operação         | Exemplo | Descrição                                      |
-| ---------- | -------------------- | --------- | -------------------------------------------------- |
-| **>**    | Maior que          | a > b   | Verdadeira se**a** for maior que **b**.          |
-| <        | Menor que          | a < b   | Verdadeira se**a** for menor que **b**           |
-| **>=**   | Maior ou igual que | a >= b  | Verdadeira se**a** for maior ou igual que **b**. |
-| <=       | Menor ou igual que | a <>= b | Verdadeira se**a** for menor ou igual que **b**. |
-| **==**   | Igual a            | a == b  | Verdadeira se**a** igual a **b**.                |
-| **!=**   | Diferente de       | a != b  | Verdadeira se**a** for diferente de **b**.       |
+| Símbolo | Operação           | Exemplo | Descrição                                        |
+|---------|--------------------|---------|--------------------------------------------------|
+| **>**   | Maior que          | a > b   | Verdadeira se**a** for maior que **b**.          |
+| <       | Menor que          | a < b   | Verdadeira se**a** for menor que **b**           |
+| **>=**  | Maior ou igual que | a >= b  | Verdadeira se**a** for maior ou igual que **b**. |
+| <=      | Menor ou igual que | a <>= b | Verdadeira se**a** for menor ou igual que **b**. |
+| **==**  | Igual a            | a == b  | Verdadeira se**a** igual a **b**.                |
+| **!=**  | Diferente de       | a != b  | Verdadeira se**a** for diferente de **b**.       |
 
 ##### Operadores Lógico:
 
@@ -245,6 +245,330 @@ public void Imprimir(string info)
 }
 
 ```
+
+
+## Parâmetros
+Argumentos podem ser passados para parâmetros por valor ou por referência.
+
+#### in
+A in palavra-chave faz com que os argumentos sejam passados por referência, mas garante que o argumento não seja modificado;
+
+```
+public static void Main(String[] args)
+{
+
+    int readonlyArgument = 44;
+    PassagemParamentroIn(readonlyArgument);
+    Console.WriteLine(readonlyArgument);
+
+}
+
+private static void PassagemParamentroIn( in int paramentro )
+{
+   
+    // Uncomment the following line to see error CS8331
+    //paramentro = 10;
+    
+}
+```
+
+#### ref
+
+A ref palavra-chave indica que um valor é passado por referência. Ela é usada em quatro contextos diferentes
+
+```
+public static void Main(String[] args)
+{
+    int number = 44;
+    PassagemParamentroIn(ref number);
+    Console.WriteLine(number);
+
+}
+
+private static void PassagemParamentroIn( ref int paramentro )
+{
+
+    paramentro += 10;
+
+}
+
+Saida:
+54
+
+
+```
+
+#### out
+
+A palavra-chave out faz com que os argumentos sejam passados por referência.  
+A diferen entre **ref** é que o ref requer que seja inicialzado diferente de **out**
+
+```
+public static void Main(String[] args)
+{
+  int number;
+  PassagemParamentroIn(out number);
+  Console.WriteLine(number);
+
+}
+
+private static void PassagemParamentroIn( out int paramentro )
+{
+
+  paramentro = 10;
+
+}
+
+Saida:
+10
+
+```
+
+## Coleções
+
+### Array
+
+Coleção mais basica
+
+```
+string[] frutas =
+{
+    "Banana",
+    "Laranja",
+    "Uva"
+};
+
+Console.WriteLine("Tamanho do array {0} ", frutas.Length);
+
+Console.WriteLine("Elemento do array de indice 1: {0}", frutas[1]);
+
+for (int i = 0; i < frutas.Length; i++)
+{
+    Console.WriteLine("Elemento do array de indice {0}: {1}",i, frutas[i]);
+}
+
+```
+
+### Dictionary
+Permite que você acesse elementos em uma coleção usando a chave de cada elemento.
+
+```
+Dictionary<string, string> pessoas = new Dictionary<string, string>();
+
+pessoas.Add("189345678","Joao");
+pessoas.Add("123456788","Maria");
+pessoas.Add("129936782","Pedro");
+pessoas.Add("863456789","Jose");
+
+Console.WriteLine("Buscando {0} pelo seu Key: 129936782", pessoas["123456788"]);
+
+foreach (var pessoa in pessoas)
+{
+    Console.WriteLine("key: {0} value {1}" , pessoa.Key,pessoa.Value);
+}
+
+Saida: 
+
+Buscando Maria pelo Key: 129936782
+key: 189345678 value Joao
+key: 123456788 value Maria
+key: 129936782 value Pedro
+key: 863456789 value Jose
+ 
+```
+### SortDictionary
+Representa uma coleção de pares chave/valor que são classificados na chave
+
+```
+
+SortedDictionary<string, string> pessoasSort = new SortedDictionary<string, string>();
+Dictionary<string, string> pessoasNoSort = new Dictionary<string, string>();
+
+pessoasSort.Add("2","Joao");
+pessoasSort.Add("4","Maria");
+pessoasSort.Add("3","Pedro");
+pessoasSort.Add("5","Jose");
+pessoasSort.Add("1","Atonio");
+
+
+pessoasNoSort.Add("2","Joao");
+pessoasNoSort.Add("4","Maria");
+pessoasNoSort.Add("3","Pedro");
+pessoasNoSort.Add("5","Jose");
+pessoasNoSort.Add("1","Atonio");
+
+Console.WriteLine("Com Sort");
+foreach (var pessoa in pessoasSort)
+{
+    Console.WriteLine("key: {0} value {1}" , pessoa.Key,pessoa.Value);
+}
+
+Console.WriteLine();
+
+Console.WriteLine("Sem Sort");
+foreach (var pessoa in pessoasNoSort)
+{
+    Console.WriteLine("key: {0} value {1}" , pessoa.Key,pessoa.Value);
+}
+
+Saida:
+Com Sort
+key: 1 value Atonio
+key: 2 value Joao
+key: 3 value Pedro
+key: 4 value Maria
+key: 5 value Jose
+
+Sem Sort
+key: 2 value Joao
+key: 4 value Maria
+key: 3 value Pedro
+key: 5 value Jose
+key: 1 value Atonio
+
+
+```
+Como podem observa usamos a mesma ordem ao adcionar os itens na coleção porem o SortDictionary é ordenado pela sua chave
+diferente Dictionary
+
+
+### Hashtable 
+Representa uma coleção de pares chave-valor organizados com base no código hash da chave.
+
+```
+try
+{
+    Hashtable aulas = new Hashtable();
+
+    aulas.Add("pt", "Portugues");
+    aulas.Add("mt", "Matematica");
+    aulas.Add("ht", "historia");
+    aulas.Add("fs", "fisica");
+
+
+    foreach (DictionaryEntry aula in aulas)
+    {
+        Console.WriteLine("Aular {0} de key {1}", aula.Value, aula.Key);
+    }
+    
+    aulas.Add("fs", "teste");
+
+}
+catch (Exception)
+{
+    Console.WriteLine("Adicione um novo elemento com uma key já existente");
+}
+
+Saida:
+
+Aula Portugues de key pt
+Aula historia de key ht
+Aula Matematica de key mt
+Aula fisica de key fs
+Adicione um novo elemento com uma key já existente
+
+
+```
+
+Vale Ressalta que apesa de do **Hashtable** e do **Dictionary* serem parecidos temos algumas diferenças importante:  
+
+| Hashtable                                                                                                           | Dictionary                                                                                                 |
+|---------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+ | Uma  Hashtable é uma coleção não genérica                                                                           | Um Dictionary é uma coleção genérica                                                                       |
+ | Em uma Hashtable, você pode armazenar pares de chave/valor do mesmo tipo ou de tipos diferentes.                    | Em um Dictionary, você pode armazenar pares de chave/valor do mesmo tipo.                                  |
+ | Em uma Hashtable, não há necessidade de especificar o tipo de chave e valor.                                        | Em um Dictionary você precisa especificar o tipo da chave e valor.                                         |
+| A recuperação de dados é mais lenta do que em um Dictionary devido ao boxing/unboxing.                              | A recuperação de dados é mais rápida do que Hashtable devido a não ter que realizar o  boxing/unboxing.    |
+| Em uma Hashtable, se você tentar acessar uma chave que não está presente na Hashtable, ela fornecerá valores nulos. | Em um Dictionary, se você tentar acessar uma chave que não está presente no Dicionário , ocorrerá um erro. |
+ | É Thread-Safe                                                                                                       | É Thread safe somente para os membros públicos e estáticos                                                 |
+| Não mantém a ordem dos valores armazenados                                                                          | Sempre mantém a ordem dos valores armazenados                                                              |
+
+### HashSet
+Representa um conjunto de valores.
+
+```
+
+var animais = new HashSet<string> { "Gato","Leao", "Cachorro","Lobo", "Papagaio","Piriquito" };
+var felinos = new HashSet<string> { "Gato","Leao" };
+var caninos = new HashSet<string> {  "Cachorro","Lobo" };
+
+var passaros = new HashSet<string> { "Papagaio","Piriquito" };
+
+
+if (felinos.IsSubsetOf(animais))
+{
+    Console.WriteLine("felinos é um subconjunto de animais");
+}
+
+if (caninos.IsSubsetOf(animais))
+{
+    Console.WriteLine("caninos é um subconjunto de animais");
+}
+
+if (passaros.IsSubsetOf(animais))
+{
+    Console.WriteLine("passaros é um subconjunto de animais");
+}
+
+var todosAnimais = new HashSet<string>();
+
+todosAnimais.UnionWith(passaros);
+todosAnimais.UnionWith(felinos);
+todosAnimais.UnionWith(passaros);
+
+if (todosAnimais.IsSubsetOf(animais))
+{
+    Console.WriteLine("todosAnimais é um subconjunto de animais");
+}
+
+Saida:
+felinos é um subconjunto de animais
+caninos é um subconjunto de animais
+passaros é um subconjunto de animais
+todosAnimais é um subconjunto de animais
+
+
+```
+
+## Qual Coleção usar ???
+
+Segue alguns cenários onde cada uma faria sentido usar.
+
+#### Array
+Quando vc pretende trabalhar com coleções de tamanho fixo ou arquivos e valores de baixo nivel
+
+#### Stack(pilha)
+
+Imagine cenário onde vc tem uma pilha de pratos onde o primeiro prato a ser colocado ser ficara
+abaixo do demais pratos empinhados nesse caso seria um fote candidato para o uso do **Stack**
+
+#### Queue(Fila)
+
+Imagine o cenário onde sua coleção o elemento que será removido será sempre o primeiro a entra,
+seguindo esse pensamento imagine uma fila de carro ou pedagio, onde o primeiro a entra é sempre o primeiro a sair.
+
+
+#### HashSet
+Indicado para operações de conjunto, como saber se um elemento está contido ou não em uma coleção ou paras
+saber se as duas coleções possuem um ou mais elementos em comum.
+
+
+#### Dictionary
+Indicado quando vc tem coleções que precisam trabalhar com chave e valor.   
+exemplo: coleções de pessoas com CPF;
+
+125938749858 Maria   
+253298749638 Pedro  
+193865749858 Joao  
+596969938858 Jose  
+
+#### List
+Lista mais dinamica e poderosa, onde você poder, ordenar, reverte e adicionar um item em qualquer posição ou remover
+É indicado quando vc quer manipular uma lista de elemento mas detalhadamente
+
+#### LinkedList 
+Quando a situações onde é nescessário remover ou inserir grandes quantidade de dados de maneira rapida
+Como ele permite inserir elementos no inicio ou no fim ou antes e depois de outro elemento.
+
 
 
 
@@ -812,6 +1136,415 @@ Essa interface herda a IEnumerable<T> interface para que, se ela representa uma 
 
 ```
 A interface IQueryable é útil quando você esta consultando uma coleção que foi carregada usando LINQ ou Entity Framework e você quer aplicar um filtro nesta coleção.
+
+
+
+## System.IO
+Contém tipos que permitem ler e gravar em arquivos e fluxos de dados, e tipos que fornecem suporte básico de diretório e arquivo.
+
+#### Directory
+
+Expõe métodos estáticos para criar, mover e enumerar em diretórios e subdiretórios. Essa classe não pode ser herdada.
+
+* EnumerateFiles: Retorna uma coleção enumerável de nomes completos de arquivo em um caminho especificado
+* Move: Move um arquivo ou um diretório e seu conteúdo para um novo local.
+* Exist: Determina se o caminho especificado se refere a um diretório existente em disco.
+* Delete: Exclui um diretório vazio de um caminho especificado.
+
+```
+string meuDiretorio = @"C:\diretorio";
+
+
+var arquivos = Directory.EnumerateFiles(diretorio);
+        
+foreach (var arquivo in arquivos)
+{
+    Console.WriteLine("{0} contem {1}",diretorio, arquivo);
+}
+
+saida:
+C:\diretorio contem C:\diretorio\arquivo1.txt
+C:\diretorio contem C:\diretorio\arquivo2.txt
+C:\diretorio contem C:\diretorio\arquivo3.txt
+
+string diretorioAtual = @"C:\diretorio";
+string novoDiretorio = @"C:\diretorio_novo";
+
+
+try
+{
+    Directory.Move(diretorioAtual, novoDiretorio);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+}
+
+Console.WriteLine(Directory.Exists(diretorioAtual));
+Console.WriteLine(Directory.Exists(novoDiretorio));
+Console.WriteLine(Directory.Exists(meuDiretorio));
+
+saida:
+false
+true
+true
+
+OBS: diretorioAtual não existe mais depois de ter sido movido.
+
+var diretorioSemArquivo = @"c:\diretorio_sem_arquivo
+var diretorioComArquivo = @"c:\diretorio_com_arquivo
+
+Consegue realizar a operação
+try
+{
+    Directory.Delete(diretorioSemArquivo);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+}
+
+Não Consegue realizar a operação
+
+try
+{
+    Directory.Delete(diretorioComArquivo);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+}
+
+Consegue realizar a operação
+try
+{
+    Directory.Delete(diretorioComArquivo,true);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+}
+
+
+
+```
+
+#### File
+
+Fornece métodos estáticos para a criação, cópia, exclusão, deslocamento e abertura de um arquivo, além de ajudar na criação de objetos
+
+* Exist: Determina se o arquivo especificado existe.
+* Delete: Exclui o arquivo especificado.
+* CreateText: Cria ou abre um arquivo para gravar texto codificado em UTF-8. Se o arquivo já existir, o conteúdo dele será substituído.
+
+```
+var arquivoNaoExistente = @"c:\diretorio\arquivo.txt";
+var arquivoExistente = @"c:\diretorio\banana.txt";
+
+Console.WriteLine(File.Exist(arquivoNaoExistente));
+Console.WriteLine(File.Exist(arquivoExistente));
+
+Saida:
+false
+true
+
+
+var diretorioComArquivo = @"c:\diretorio_com_arquivo
+
+var arquivos = Directory.EnumerateFiles(diretorio);
+        
+foreach (var arquivo in arquivos)
+{
+    File.Delete(arquivo);
+}
+
+string path = @"c:\temp\MyTest.txt";
+if (!File.Exists(path))
+{
+    // Create a file to write to.
+    using (StreamWriter sw = File.CreateText(path))
+    {
+        sw.WriteLine("Hello");
+        sw.WriteLine("And");
+        sw.WriteLine("Welcome");
+    }
+}
+
+
+```
+
+### FileInfo
+Fornece propriedades e métodos de instância para a criação, cópia, exclusão, deslocamento e abertura de arquivos, além de ajudar na criação de objetos FileStream. 
+
+* FullName: Obtém o caminho completo do diretório ou arquivo.
+* CreationTime: Obtém ou define a hora de criação do arquivo ou diretório atual.
+* Extension: Obtém a parte de extensão do nome do arquivo, incluindo o ponto à esquerda . mesmo que seja o nome de arquivo inteiro ou uma cadeia de caracteres vazia se nenhuma extensão estiver presente.
+
+```
+var fileInfo = new FileInfo(@"c:\diretorio\arquivo.pdf");
+        
+Console.WriteLine("{0} criado em {1:D} com extensao {2}", fileInfo.FullName, fileInfo.CreationTime,fileInfo.Extension);
+saida:
+
+c:\diretorio\arquivo.pdf criado em Monday, June 20, 2022 com extensao .pdf
+
+```
+
+## System.Data
+
+fornece acesso a classes que representam a arquitetura de ADO.NET. ADO.NET permite que você crie componentes que gerenciam dados de várias fontes de dados com eficiência
+
+
+* DataRow:Representa uma linha de dados em um DataTable.
+* DataColumn:Representa o esquema de uma coluna em um DataTable.
+* DataTable: Representa uma tabela de dados na memória.
+
+```
+     public static void Main(String[] args)
+    {
+        IEnumerable<Pessoa> pessoas = new[] { new Pessoa("Joao", 35), new Pessoa("Maria", 39), new Pessoa("Jose", 25) };
+
+        DataTable pessoasTable = new DataTable("Pessoa");
+        DataColumn[] cols =
+        {
+            new("Nome"),
+            new("Idade"),
+        };
+        pessoasTable.Columns.AddRange(cols);
+
+        foreach (var pessoa in pessoas)
+        {
+            var row = pessoasTable.Rows.Add();
+            row[0] = pessoa.Nome;
+            row[1] = pessoa.Idade;
+        }
+
+        foreach (DataColumn col in pessoasTable.Columns)
+        {
+            Console.Write("{0,-14}", col.ColumnName);
+        }
+
+        Console.WriteLine();
+
+        foreach (DataRow row in pessoasTable.Rows)
+        {
+            foreach (DataColumn col in pessoasTable.Columns)
+            {
+                Console.Write("{0,-14}", row[col]);
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine();
+    }
+
+    struct Pessoa
+    {
+        public string Nome { get; }
+        public int Idade { get; }
+
+        public Pessoa(string nome, int idade)
+        {
+            Nome = nome;
+            Idade = idade;
+        }
+    }
+}
+
+Saida:
+
+Nome          Idade         
+Joao          35            
+Maria         39            
+Jose          25 
+   
+```
+
+## System.Security
+
+#### SecureString
+
+Representa o texto que deve ser mantido como confidencial, como excluindo-o da memória do computador quando ele não for mais necessário. Essa classe não pode ser herdada.
+
+```
+
+ public static void Main(String[] args)
+    {
+        SecureString securePwd = new SecureString();
+        ConsoleKeyInfo key;
+
+        Console.Write("Enter password: ");
+        do
+        {
+            key = Console.ReadKey(true);
+
+            // Ignore any key out of range.
+            if (((int)key.Key) >= 65 && ((int)key.Key <= 90))
+            {
+                // Append the character to the password.
+                securePwd.AppendChar(key.KeyChar);
+                Console.Write("*");
+            }
+            // Exit if Enter key is pressed.
+        } while (key.Key != ConsoleKey.Enter);
+
+        Console.WriteLine();
+
+        try
+        {
+            string senha = new NetworkCredential("", securePwd).Password;
+            Console.WriteLine(senha);
+        }
+        catch (Win32Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        finally
+        {
+            securePwd.Dispose();
+        }
+    }
+
+
+```
+
+## System.Diagnostics
+
+Fornece classes que permitem que você interaja com processos do sistema, logs de eventos e contadores de desempenho.
+
+#### Process
+
+```
+try
+{
+    using (Process myProcess = new Process())
+    {
+        myProcess.StartInfo.UseShellExecute = false;
+        // You can start any process, HelloWorld is a do-nothing example.
+        myProcess.StartInfo.FileName = "C:\\HelloWorld.exe";
+        myProcess.StartInfo.CreateNoWindow = true;
+        myProcess.Start();
+        // This code assumes the process you are starting will terminate itself.
+        // Given that it is started without a window so you cannot terminate it
+        // on the desktop, it must terminate itself or you can do it programmatically
+        // from this application using the Kill method.
+    }
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+}
+```
+
+#### FileVersionInfo
+
+Fornece informações de versão para um arquivo físico no disco.
+
+```
+FileVersionInfo.GetVersionInfo(Path.Combine(Environment.SystemDirectory, "Notepad.exe"));
+FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(Environment.SystemDirectory + "\\Notepad.exe");
+
+// Print the file name and version number.
+Console.WriteLine("File: " + myFileVersionInfo.FileDescription + '\n' +
+   "Version number: " + myFileVersionInfo.FileVersion);
+```
+
+## System.Globalization
+
+#### CultureInfo
+
+Fornece informações sobre uma cultura específica (chamada de localidade para desenvolvimento de código não gerenciado). As informações incluem os nomes da cultura, o sistema de escrita, o calendário usado, a ordem de classificação das cadeias de caracteres e a formatação de datas e números  
+
+
+```
+public static void Main(String[] args)
+{
+
+    Console.WriteLine("Em portugues");
+    ImprimirDiasDaSemana();
+
+    Console.WriteLine();
+    
+    Console.WriteLine("Em Espanhou");
+    
+    ImprimirDiasDaSemana("es-ES");
+
+}
+
+private static void ImprimirDiasDaSemana(string locael = "pt-BR")
+{
+    CultureInfo ptBR = new CultureInfo(locael);
+    
+    foreach (string nomeDia in ptBR.DateTimeFormat.DayNames)
+        Console.WriteLine(nomeDia);
+    Console.WriteLine("Hoje é : " +
+                      ptBR.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek));
+}
+
+Saida:
+
+Em portugues
+domingo
+segunda-feira
+terça-feira
+quarta-feira
+quinta-feira
+sexta-feira
+sábado
+Hoje é : domingo
+
+Em Espanhou
+domingo
+lunes
+martes
+miércoles
+jueves
+viernes
+sábado
+Hoje é : domingo
+
+
+
+```
+
+### RegionInfo
+Contém informações sobre o país/região.
+
+```
+
+var regiaoInfo = new RegionInfo("pt-BR");
+var hoje = DateTime.Now;
+Console.WriteLine($"Moeda  - {regiaoInfo.CurrencySymbol} {"34,67"}");
+Console.WriteLine($"Moeda 34,67 - {regiaoInfo.CurrencyNativeName}");
+Console.WriteLine($"{regiaoInfo.ThreeLetterISORegionName} ");
+Console.WriteLine($"{regiaoInfo.ISOCurrencySymbol} ");
+Console.WriteLine($"Usa sistema métrico - {regiaoInfo.IsMetric} ");
+Console.WriteLine(hoje.ToString());
+Console.WriteLine(hoje.ToShortDateString());
+Console.WriteLine(hoje.ToLongDateString());
+Console.WriteLine(hoje.ToShortTimeString());
+Console.WriteLine(hoje.ToLongTimeString());
+
+Saida: 
+
+Moeda  - R$ 34,67
+Moeda 34,67 - Real brasileiro
+BRA 
+BRL 
+Usa sistema métrico - True 
+6/26/2022 12:49:21 PM
+6/26/2022
+Sunday, June 26, 2022
+12:49 PM
+12:49:21 PM
+
+
+```
+
+## System.Buffers
+
+Contém tipos usados na criação e no gerenciamento de buffers de memória, como aqueles representados por Span<T> e Memory<T>.
 
 
 
