@@ -574,6 +574,56 @@ Carros em fila de pedagio 0
 
 ```
 
+## Stark
+Representa uma coleção não genérica simples UEPS (último a entrar, primeiro a sair) de objetos.
+
+![img_4.png](img_4.png)
+
+```
+Stack<string> pratos = new Stack<string>();
+
+
+Console.WriteLine( "Pratos Sujos antes do almoço {0} \n",pratos.Count);
+
+for (int i = 0; i < 10; i++)
+{
+    pratos.Push("Prato "+(i+1));
+}
+
+Console.WriteLine( "Pratos Sujos depois do almoço {0} \n",pratos.Count);
+
+Console.WriteLine();
+
+while (pratos.Count > 0)
+{
+    Console.WriteLine( "{0} lavado", pratos.Pop() );
+}
+
+Console.WriteLine();
+
+Console.WriteLine( "Pratos Sujos depois que me dei ao trabalho de lava {0} \n",pratos.Count);
+
+saida:
+
+Pratos Sujos antes do almoço 0 
+
+Pratos Sujos depois do almoço 10
+
+Prato 10 lavado
+Prato 9 lavado
+Prato 8 lavado
+Prato 7 lavado
+Prato 6 lavado
+Prato 5 lavado
+Prato 4 lavado
+Prato 3 lavado
+Prato 2 lavado
+Prato 1 lavado
+
+Pratos Sujos depois que me dei ao trabalho de lava 0 
+
+```
+
 ## Qual Coleção usar ???
 
 Segue alguns cenários onde cada uma faria sentido usar.
