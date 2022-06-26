@@ -529,6 +529,51 @@ todosAnimais é um subconjunto de animais
 
 ```
 
+### Queue
+Representa uma coleção primeiro a entrar, primeiro a sair de objetos.
+
+![img_3.png](img_3.png)
+
+```
+
+Queue carros = new Queue();
+carros.Enqueue("Carro 1");
+carros.Enqueue("Carro 2");
+carros.Enqueue("Carro 3");
+
+Console.WriteLine( "Carros na fila de pedagio\n");
+
+foreach ( var carro in carros )
+    Console.WriteLine( "{0}", carro );
+
+Console.WriteLine();
+
+while (carros.Count > 0)
+{
+    Console.WriteLine( "Pedagio do {0} pago", carros.Dequeue() );
+}
+
+Console.WriteLine();
+
+Console.WriteLine("Carros em fila de pedagio {0}",carros.Count );
+
+Sáida:
+
+Carros na fila de pedagio
+
+Carro 1
+Carro 2
+Carro 3
+
+Pedagio do Carro 1 pago
+Pedagio do Carro 2 pago
+Pedagio do Carro 3 pago
+
+Carros em fila de pedagio 0
+
+
+```
+
 ## Qual Coleção usar ???
 
 Segue alguns cenários onde cada uma faria sentido usar.
