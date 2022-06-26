@@ -549,4 +549,271 @@ saida: cafe
 
 ## System.Threading
 
+#### Thread
+São mecanimos que permite ter mais de um fluxo de controle na aplicação.
+
+```
+
+    public static void Main(String[] args)
+    {
+        Thread.CurrentThread.Name = "Principal";
+        
+        Thread t1 = new Thread(ThreadProc)
+        {
+            Name = "Secundária - "
+        };
+        t1.Start();
+
+        for (int i = 0; i < 5; i++)
+        {
+            Console.WriteLine("Thread Atual - {0} {1}", Thread.CurrentThread.Name, i);
+
+            Thread.Sleep(1000);
+        }
+    }
+
+    private static void ThreadProc() {
+        for (int i = 0; i < 5; i++) {
+            Console.WriteLine("Thread Atual - {0} {1}", Thread.CurrentThread.Name, i);
+            Thread.Sleep(1000);
+        }
+    }
+    
+saida:
+    
+Thread Atual - Principal 0
+Thread Atual - Secundária 0
+Thread Atual - Principal 1
+Thread Atual - Secundária 1
+Thread Atual - Principal 2
+Thread Atual - Secundária 2
+Thread Atual - Principal 3
+Thread Atual - Secundária 3
+Thread Atual - Principal 4
+Thread Atual - Secundária 4
+
+```
+
+#### Time
+Permite chamar um delegado continuamente em intervalos de tempo especificado.
+
+Segue um exemplo de uma aplicação pratica ondem temos uma aplicação que criar orcamentos em tempos e tempos é verificado a existencias de novos orcamentos e faturado.
+
+```
+
+public class Progam
+{
+    
+    private static Timer? _timer;
+
+    private static readonly IList<Orcamento> _orcamentos = new List<Orcamento>();
+
+    private static bool _exiteProcessamento = true;
+
+    public static void Main(String[] args)
+    {
+        var timerState = new TimerState { Counter = 0 };
+
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff}: iniciado processo");
+        
+        _timer = new Timer(
+            callback: TimerTask,
+            state: timerState,
+            dueTime: 1000,
+            period: 2000);
+        
+        Thread t1 = new Thread(ThreadCriarOrcamentos)
+        {
+            Name = "Thread Orcamentos - "
+        };
+        t1.Start();
+
+        while (_exiteProcessamento)
+        {
+            Task.Delay(2000).Wait();
+        }
+        
+        Console.WriteLine("Total de Orcamentos faturado {0} ",timerState.Counter);
+
+        _timer.Dispose();
+        
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff}: processo finalizado.");
+    }
+
+    private static void TimerTask(object timerState)
+    {
+       
+       
+        var state = timerState as TimerState;
+
+        var orcamentosAberto = _orcamentos.Where(o => o.Faturado == false);
+        
+        foreach (var orcamento in orcamentosAberto)
+        {
+            Console.WriteLine("Orcamento de Número {0} faturado",orcamento.Numero);
+            orcamento.Faturado = true;
+        }
+        
+     
+        
+        Interlocked.Increment(ref state.Counter);
+    }
+    
+    private static void ThreadCriarOrcamentos() {
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff}: iniciada janela de criação de orcamento.");
+        for (int i = 0; i < 5; i++) {
+            _orcamentos.Add(new Orcamento(i +1));
+            Thread.Sleep(1000);
+        }
+        Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff}: finalizada janela de criação de orcamento.");
+        _exiteProcessamento = false;
+    }
+
+    class TimerState
+    {
+        public int Counter;
+    }
+    
+    class Orcamento
+    {
+        public bool Faturado { get; set; }
+        public int Numero { get; }
+        public Orcamento(int numero)
+        {
+            Numero = numero;
+        }
+    }
+}
+
+```
+
+#### ThreadPool
+
+Fornece um pool de threads que podem ser usados para executar tarefas.
+
+Podemos ter um conjuto de threads(ThreadPool), deixando disponivel conforme o uso nescessário.
+
+
+```
+
+public class Progam
+{
+    
+
+
+    public static void Main(String[] args)
+    {
+        ThreadPool.QueueUserWorkItem(UmaThreadQualquer);  
+        Console.WriteLine("Thread Principal");  
+        Thread.Sleep(500);  
+        
+        Pessoa p = new Pessoa("Fulano");  
+        ThreadPool.QueueUserWorkItem(ThreadComInformacoes, p);  
+        
+        
+        int threads, portas;  
+      
+        // Buscando numero de threads 
+        ThreadPool.GetMaxThreads(out threads, out portas);  
+        Console.WriteLine($"Maximo  threads: {threads} ");  
+        Console.WriteLine($"Minimo port threads: {portas}");  
+        
+        
+        // Recupera a diferença entre o número máximo de threads do pool de thread
+        ThreadPool.GetAvailableThreads(out threads, out portas);  
+        Console.WriteLine($"Availalbe worker threads: {threads} ");  
+        Console.WriteLine($"Available completion port threads: {portas}");  
+
+
+        // definimo minimo de thread  
+        int minWorker, minIOC;  
+        ThreadPool.GetMinThreads(out minWorker, out minIOC);  
+        ThreadPool.SetMinThreads(4, minIOC);  
+        
+        // número total de processos disponíveis na máquina
+        int processCount = Environment.ProcessorCount;  
+        Console.WriteLine($"No. of processes available on the system: {processCount}"); 
+    }
+
+
+    static void UmaThreadQualquer(Object stateInfo)  
+    {  
+        Console.WriteLine("Outra Thread trabalhando dentro do pool");  
+        Thread.Sleep(1000);          
+    }  
+    
+    static void ThreadComInformacoes(Object stateInfo)
+    {
+        var pessoa = stateInfo as Pessoa;
+        Console.WriteLine($"{pessoa.Nome} realizando algo dentro da ThreadPool.");  
+        Thread.Sleep(1000);  
+    }  
+
+    class Pessoa
+    {
+        public string Nome { get; }
+       
+
+        public Pessoa(string nome)
+        {
+            Nome = nome;
+       
+        }
+    }
+}
+
+```
+
+## System.Linq
+
+#### Enumerable
+
+* São coleçoes somente leitura, não permite ser alterado.
+* Possui um método para retornar o próximo item, ou seja, não precisa que toda lista seja já armazenado na memoria.
+
+
+```
+    IEnumerable<int> numeros = new[] { 5, 15,69,45 };
+        
+    Console.WriteLine("Maior número {0}", numeros.Max());
+    Saida: 69
+    
+    Console.WriteLine("Menor número {0}", numeros.Min());
+    Saida: 5
+    Console.WriteLine("Soma número {0}", numeros.Sum());
+    Saida: 134
+    
+    Console.WriteLine("Quantidade  {0}", numeros.Count());
+    Saida: 4
+```
+
+#### Queryable
+
+Fornece um conjunto de métodos static (Shared no Visual Basic) para consultar estruturas de dados que implementam IQueryable<T>.
+Geralmente é usada quando estamos fazendo queries com LINQ.
+
+A IQueryable<T> interface destina-se à implementação por provedores de consulta.
+
+Essa interface herda a IEnumerable<T> interface para que, se ela representa uma consulta, os resultados dessa consulta possam ser enumerados. A enumeração força a árvore de expressão associada a um IQueryable<T> objeto a ser executado. As consultas que não retornam resultados enumeráveis são executadas quando o Execute<TResult>(Expression) método é chamado.
+
+```
+   int[] array = new int[2];
+   array[0] = 230;
+   array[1] = 186;
+
+   var items = array.AsQueryable(); 
+   Console.WriteLine($"Média: {items.Average()}");
+   Console.WriteLine($"Soma: {items.Sum()}");
+   
+   Saida:
+   Média: 208
+   Soma: 416
+
+
+```
+A interface IQueryable é útil quando você esta consultando uma coleção que foi carregada usando LINQ ou Entity Framework e você quer aplicar um filtro nesta coleção.
+
+
+
+
 
