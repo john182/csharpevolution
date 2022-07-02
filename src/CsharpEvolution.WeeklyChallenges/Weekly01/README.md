@@ -574,7 +574,7 @@ Carros em fila de pedagio 0
 
 ```
 
-## Stark
+## Stack
 Representa uma coleção não genérica simples UEPS (último a entrar, primeiro a sair) de objetos.
 
 ![img_4.png](img_4.png)
